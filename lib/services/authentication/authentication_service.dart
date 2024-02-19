@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:test_flutter_2/common/constant/common.dart';
 
 class AuthenticationService {
-  static const String baseUrl = 'http://192.168.0.107:8080/api';
+  static const String baseUrl = CommonConst.baseApiUrl;
 
   static dynamic login(email, password) async {
     try {

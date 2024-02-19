@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<UserPorvider>(context);
+    final provider = Provider.of<UserProvider>(context);
     print(provider.token.toString());
     return const Scaffold(
       body: Text("Home Screen"),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_flutter_2/common/constant.dart';
+import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/widgets/TextField/text_buidler.dart';
 
 class AppNameWidget extends StatelessWidget {

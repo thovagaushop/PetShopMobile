@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:test_flutter_2/common/constant.dart';
-import 'package:test_flutter_2/widgets/Icons/circle_icon.dart';
+import 'package:provider/provider.dart';
+import 'package:test_flutter_2/common/constant/app_color.dart';
+import 'package:test_flutter_2/controllers/cart_provider.dart';
+import 'package:test_flutter_2/controllers/user_provider.dart';
+import 'package:test_flutter_2/models/cart_model.dart';
+import 'package:test_flutter_2/models/product_model.dart';
+import 'package:test_flutter_2/screen/login_screen.dart';
+import 'package:test_flutter_2/services/cart/cart_service.dart';
+import 'package:test_flutter_2/services/snackBar/snackbar_service.dart';
+import 'package:test_flutter_2/widgets/Header/main_header.dart';
 import 'package:test_flutter_2/widgets/Product/product_detail_body.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key});
+  final ProductModel product;
+  const ProductDetailScreen({Key? key, required this.product})
+      : super(key: key);
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  var quantity = 0;
+  int quantity = 0;
+  bool _isLoading = false;
 
   void increaseQuantity() {
     setState(() {
@@ -27,34 +38,75 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
+  Future<void> handleAddToCart(
+      String? token, dynamic cartProvider, int productId) async {
+    setState(() {
+      _isLoading = true;
+    });
+    if (token == null || token.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBarService.showSnackbar("Login first", "danger"));
+
+      Future.delayed(const Duration(seconds: 3));
+
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const LoginScreen(
+                  isHistory: true,
+                )),
+      );
+
+      return;
+    }
+
+    // Validation quantity
+    if (quantity <= 0) {
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      CartModel cartModel =
+          await CartService().addProductToCart(productId, quantity, token);
+
+      cartProvider.addItem(cartModel);
+      setState(() {
+        _isLoading = false;
+      });
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBarService.showSnackbar(
+          "Add product to cart successfully!!!", "success"));
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBarService.showSnackbar(e.toString(), "danger"));
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.mainColor,
-        body: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleIconCustom(icon: Icons.arrow_back_ios),
-                  Text(
-                    "Petty",
-                    style: TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w300,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  CircleIconCustom(icon: Icons.shopping_basket)
-                ],
-              ),
-              SizedBox(
+              const MainHeaderWidget(hasLeftIcon: true),
+              const SizedBox(
                 height: 5,
               ),
-              ProductDetailBody(),
+              ProductDetailBody(product: widget.product),
             ],
           ),
         ),
@@ -96,8 +148,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       Text(
                         quantity.toString(),
-                        style:
-                            TextStyle(fontSize: 14, color: AppColors.primary),
+                        style: const TextStyle(
+                            fontSize: 14, color: AppColors.primary),
                       ),
                       const SizedBox(
                         height: 5,
@@ -113,21 +165,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () => handleAddToCart(
+                      userProvider.token, cartProvider, widget.product.id!),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 30),
                     decoration: BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(30)),
-                    child: const Text(
-                      "Add to cart",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
+                    child: _isLoading
+                        ? const Center(
+                            child:
+                                CircularProgressIndicator(), // or any other loading indicator
+                          )
+                        : const Text(
+                            "Add to cart",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
                   ),
                 )
               ],

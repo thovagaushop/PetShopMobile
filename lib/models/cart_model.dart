@@ -1,62 +1,56 @@
 class CartModel {
-  int? id;
+  int? productId;
+  String? productTitle;
   int? quantity;
-  double? totalPrice;
-  String? title;
-  double? price;
-  String? category;
+  double? discount;
+  double? productSpecialPrice;
   String? image;
 
   CartModel({
-    this.id,
+    this.productId,
+    this.productTitle,
     this.quantity,
-    this.totalPrice,
-    this.title,
-    this.price,
-    this.category,
+    this.discount,
+    this.productSpecialPrice,
     this.image,
   });
 
   CartModel copyWith({
-    int? id,
+    int? productId,
+    String? productTitle,
     int? quantity,
-    double? totalPrice,
-    String? title,
-    double? price,
-    String? category,
+    double? discount,
+    double? productSpecialPrice,
     String? image,
   }) {
     return CartModel(
-      id: id ?? this.id,
+      productId: productId ?? this.productId,
+      productTitle: productTitle ?? this.productTitle,
       quantity: quantity ?? this.quantity,
-      totalPrice: totalPrice ?? this.totalPrice,
-      title: title ?? this.title,
-      price: price ?? this.price,
-      category: category ?? this.category,
+      discount: discount ?? this.discount,
+      productSpecialPrice: productSpecialPrice ?? this.productSpecialPrice,
       image: image ?? this.image,
     );
   }
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
-      id: json['id'],
+      productId: json['productId'],
+      productTitle: json['productTitle'],
       quantity: json['quantity'],
-      totalPrice: json['totalPrice'],
-      title: json['title'],
-      price: json['price'],
-      category: json['category'],
+      discount: json['discount'],
+      productSpecialPrice: json['productSpecialPrice'],
       image: json['image'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
+    data['productId'] = productId;
+    data['productTitle'] = productTitle;
     data['quantity'] = quantity;
-    data['totalPrice'] = totalPrice;
-    data['title'] = title;
-    data['price'] = price;
-    data['category'] = category;
+    data['discount'] = discount;
+    data['productSpecialPrice'] = productSpecialPrice;
     data['image'] = image;
     return data;
   }

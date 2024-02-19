@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_flutter_2/controllers/cart_provider.dart';
 import 'package:test_flutter_2/controllers/user_provider.dart';
+import 'package:test_flutter_2/screen/index.dart';
+import 'package:test_flutter_2/screen/login_screen.dart';
 import 'package:test_flutter_2/screen/shopping_screen.dart';
 
 Future<void> main() async {
@@ -23,8 +25,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<CartProvider>(
           create: (context) => CartProvider(),
         ),
-        ChangeNotifierProvider<UserPorvider>(
-          create: (context) => UserPorvider(),
+        ChangeNotifierProvider<UserProvider>(
+          create: (context) => UserProvider(),
         )
       ],
       child: MaterialApp(
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const ShoppingScreen(),
+        home: const LoginScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );

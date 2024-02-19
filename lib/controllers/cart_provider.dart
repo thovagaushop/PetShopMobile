@@ -11,13 +11,13 @@ class CartProvider with ChangeNotifier {
   int get itemCount => _items.length;
 
   void addItem(CartModel cartModel) {
-    int index = _items.indexWhere((item) => item.id == cartModel.id);
+    int index =
+        _items.indexWhere((item) => item.productId == cartModel.productId);
     if (index != -1) {
       // Item already exists, update quantity and price
       CartModel existingItem = _items[index];
       CartModel updatedItem = existingItem.copyWith(
         quantity: existingItem.quantity! + cartModel.quantity!,
-        totalPrice: existingItem.totalPrice! + cartModel.totalPrice!,
       );
       _items[index] = updatedItem;
     } else {
@@ -27,24 +27,22 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeItem(int id) {
-    _items.removeWhere((element) => element.id == id);
-    notifyListeners();
-  }
-
   void increaseQuantity(int id) {
-    final index = _items.indexWhere((e) => e.id == id);
+    final index = _items.indexWhere((e) => e.productId == id);
     _items[index].quantity = _items[index].quantity! + 1;
-    _items[index].totalPrice = _items[index].price! * _items[index].quantity!;
     notifyListeners();
   }
 
   void decreaseQuantity(int id) {
-    final index = _items.indexWhere((e) => e.id == id);
+    final index = _items.indexWhere((e) => e.productId == id);
     if (_items[index].quantity! > 1) {
       _items[index].quantity = _items[index].quantity! - 1;
-      _items[index].totalPrice = _items[index].price! * _items[index].quantity!;
     }
+    notifyListeners();
+  }
+
+  void removeItem(int id) {
+    _items.removeWhere((element) => element.productId == id);
     notifyListeners();
   }
 
@@ -53,26 +51,26 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeSingleItem(int id) {
-    final index = _items.indexWhere((e) => e.id == id);
-    if (_items[index].quantity! > 1) {
-      _items[index].quantity = _items[index].quantity! - 1;
-      _items[index].totalPrice = _items[index].price! * _items[index].quantity!;
-    } else {
-      _items.removeWhere((element) => element.id == id);
-    }
-    notifyListeners();
-  }
+  // void removeSingleItem(int id) {
+  //   final index = _items.indexWhere((e) => e.id == id);
+  //   if (_items[index].quantity! > 1) {
+  //     _items[index].quantity = _items[index].quantity! - 1;
+  //     _items[index].totalPrice = _items[index].price! * _items[index].quantity!;
+  //   } else {
+  //     _items.removeWhere((element) => element.id == id);
+  //   }
+  //   notifyListeners();
+  // }
 
-  int totalPrice() {
+  double totalPrice() {
     double totalPrice = 0;
     for (int i = 0; i < _items.length; i++) {
-      totalPrice += _items[i].totalPrice!;
+      totalPrice += _items[i].productSpecialPrice!;
     }
     notifyListeners();
     if (kDebugMode) {
       print('Total Price: $totalPrice');
     }
-    return totalPrice.round();
+    return totalPrice.abs();
   }
 }

@@ -8,7 +8,7 @@ class SnackBarService {
         color = const Color.fromRGBO(134, 229, 115, 1);
         break;
       case "danger":
-        color = Color.fromARGB(255, 229, 128, 115);
+        color = Color.fromARGB(255, 231, 88, 69);
         break;
       case "warning":
         color = Color.fromARGB(255, 229, 212, 115);
@@ -18,10 +18,13 @@ class SnackBarService {
     }
     return SnackBar(
       backgroundColor: color,
-      content: Text(message),
+      content: Text(
+        message,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       behavior: SnackBarBehavior.floating,
       showCloseIcon: true,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 5000),
     );
   }
 }
