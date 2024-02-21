@@ -4,7 +4,6 @@ import 'package:test_flutter_2/controllers/cart_provider.dart';
 import 'package:test_flutter_2/controllers/user_provider.dart';
 import 'package:test_flutter_2/screen/index.dart';
 import 'package:test_flutter_2/screen/login_screen.dart';
-import 'package:test_flutter_2/screen/shopping_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const LoginScreen(),
+        home: const IndexScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );

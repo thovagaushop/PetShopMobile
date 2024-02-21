@@ -43,6 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBarService.showSnackbar(e.toString(), "danger"));
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

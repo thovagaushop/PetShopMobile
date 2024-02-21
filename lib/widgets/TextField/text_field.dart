@@ -31,14 +31,15 @@ class TextFieldCustom extends StatelessWidget {
         hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
         border: const OutlineInputBorder(
             // borderRadius: BorderRadius.all(Radius.circular(30)),
-            borderSide: BorderSide(color: AppColors.mainColor, width: 2.0)),
+            borderSide:
+                BorderSide(color: AppColors.mainColorFocus, width: 2.0)),
         enabledBorder: const OutlineInputBorder(
-            // borderRadius: BorderRadius.all(Radius.circular(30)),
-            borderSide: BorderSide(color: AppColors.mainColor, width: 2.0)),
-        focusedBorder: const OutlineInputBorder(
             // borderRadius: BorderRadius.all(Radius.circular(30)),
             borderSide:
                 BorderSide(color: AppColors.mainColorFocus, width: 2.0)),
+        focusedBorder: const OutlineInputBorder(
+            // borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: AppColors.primary, width: 2.0)),
         // prefixIcon: const Icon(Icons.person),
         // suffixIcon: const Icon(Icons.check_circle),
       ),
