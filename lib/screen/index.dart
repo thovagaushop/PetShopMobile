@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/screen/cart_screen.dart';
 import 'package:test_flutter_2/screen/home_screen.dart';
+import 'package:test_flutter_2/screen/pet_service_screen.dart';
 import 'package:test_flutter_2/screen/shopping_screen.dart';
 
 class IndexScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _IndexScreenState extends State<IndexScreen> {
   final List<Widget> _pages = [
     const HomeScreen(),
     const ShoppingScreen(),
-    const CartScreen(),
+    const PetServiceScreen(),
   ];
   @override
   Widget build(BuildContext context) {

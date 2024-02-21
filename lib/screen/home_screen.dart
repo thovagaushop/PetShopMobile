@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/controllers/user_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final provider = Provider.of<UserProvider>(context);
     print(provider.token.toString());
     return const Scaffold(
+      backgroundColor: AppColors.mainColor,
       body: Text("Home Screen"),
     );
   }

@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/controllers/user_provider.dart';
 import 'package:test_flutter_2/models/cart_model.dart';
+import 'package:test_flutter_2/screen/home_screen.dart';
+import 'package:test_flutter_2/screen/shopping_screen.dart';
 import 'package:test_flutter_2/services/cart/cart_service.dart';
 import 'package:test_flutter_2/services/order/order_service.dart';
 import 'package:test_flutter_2/services/snackBar/snackbar_service.dart';
@@ -55,7 +57,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       fetchData();
@@ -71,12 +72,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     // print(address.isEmpty());
     final token = Provider.of<UserProvider>(context, listen: false).token!;
-    print("toekn : " + token);
     try {
       String response =
           await OrderService().createOrder(token, address, paymentMethod);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBarService.showSnackbar(response, "success"));
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBarService.showSnackbar(e.toString(), "danger"));

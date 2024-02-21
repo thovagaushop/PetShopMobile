@@ -9,19 +9,19 @@ class OrderService {
   var baseApiUrl = CommonConst.baseApiUrl;
 
   Map<String, String> getHeaderAuthorization(String token) {
-    return {'Authorization': 'Bearer $token'};
+    return {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
   }
 
   Future<String> createOrder(
       String token, String userAddress, String? paymentMethod) async {
-    print(token);
-    print(userAddress);
-    print(paymentMethod);
     try {
-      var response = await client.post(Uri.parse('$baseApiUrl/orders'),
-          body: jsonEncode({
-            userAddress: userAddress,
-            paymentMethod: paymentMethod,
+      var response = await http.post(Uri.parse('$baseApiUrl/orders'),
+          body: jsonEncode(<String?, String?>{
+            "userAddress": userAddress,
+            "paymentMethod": paymentMethod,
           }),
           headers: getHeaderAuthorization(token));
       if (response.statusCode == 200) {
@@ -29,10 +29,8 @@ class OrderService {
       }
 
       String message = jsonDecode(response.body.toString())['message'];
-      print(jsonDecode(response.body.toString()));
       throw Exception(message);
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
