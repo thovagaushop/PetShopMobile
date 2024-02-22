@@ -5,6 +5,7 @@ import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/controllers/user_provider.dart';
 import 'package:test_flutter_2/models/cart_model.dart';
 import 'package:test_flutter_2/screen/home_screen.dart';
+import 'package:test_flutter_2/screen/index.dart';
 import 'package:test_flutter_2/screen/shopping_screen.dart';
 import 'package:test_flutter_2/services/cart/cart_service.dart';
 import 'package:test_flutter_2/services/order/order_service.dart';
@@ -81,7 +82,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder: (context) => const IndexScreen(),
         ),
       );
     } catch (e) {

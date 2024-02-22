@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:test_flutter_2/models/order_model.dart';
 
 class MyOrderCardWidget extends StatefulWidget {
@@ -15,7 +17,6 @@ class _MyOrderCardWidgetState extends State<MyOrderCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -52,11 +53,8 @@ class _MyOrderCardWidgetState extends State<MyOrderCardWidget> {
                       ),
                     ),
                   ])),
-          Container(
-            width: 1.0, // Width of the line
-            height: double
-                .infinity, // Height of the line, set to match the height of the parent container
-            color: Colors.black, // Color of the line
+          const SizedBox(
+            width: 4,
           ),
           Expanded(
               flex: 1,
@@ -79,37 +77,43 @@ class _MyOrderCardWidgetState extends State<MyOrderCardWidget> {
                       const SizedBox(
                         width: 2,
                       ),
-                      Text(
-                        widget.orderModel.orderStatus!,
-                        style: TextStyle(
-                            color: widget.orderModel.orderStatus! == "SUCCESS"
-                                ? Colors.green
-                                : Colors.yellow.shade700),
+                      Expanded(
+                        child: Text(
+                          widget.orderModel.orderStatus!,
+                          style: TextStyle(
+                              color: widget.orderModel.orderStatus! == "SUCCESS"
+                                  ? Colors.green
+                                  : Colors.yellow.shade700),
+                        ),
                       )
                     ],
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    widget.orderModel.paymentMethod!,
-                    style: TextStyle(
-                        color: widget.orderModel.paymentMethod! == "CAST"
-                            ? Colors.blue
-                            : Colors.red.shade700),
+                  SizedBox(
+                    child: Text(
+                      widget.orderModel.paymentMethod!,
+                      style: TextStyle(
+                          color: widget.orderModel.paymentMethod! == "CAST"
+                              ? Colors.blue
+                              : Colors.red.shade700),
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Address: ${widget.orderModel.address!}',
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            overflow: TextOverflow.clip),
-                        maxLines: 1,
+                      Expanded(
+                        child: Text(
+                          'Address: ${widget.orderModel.address!}',
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              overflow: TextOverflow.clip),
+                          maxLines: 1,
+                        ),
                       ),
                     ],
                   ),
