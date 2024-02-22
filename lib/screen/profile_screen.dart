@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       firstnameController.text = profileModel.firstname!;
       lastnameController.text = profileModel.lastname!;
       phoneNumberController.text = profileModel.phoneNumber!;
-      addressController.text = profileModel.address!;
+      addressController.text = profileModel.address ?? "";
       if (!context.mounted) return null;
 
       return profileModel;

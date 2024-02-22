@@ -22,7 +22,7 @@ class ProfileModel {
       firstname: json['firstname'],
       lastname: json['lastname'],
       phoneNumber: json['phoneNumber'],
-      address: json['address'],
+      address: json['address'] ?? null,
     );
   }
 }

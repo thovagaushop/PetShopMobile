@@ -23,8 +23,9 @@ class ProfileService {
       if (response.statusCode == 200) {
         dynamic responseBody = jsonDecode(response.body.toString());
 
-        ProfileModel profileModel = ProfileModel.fromJson(responseBody);
+        print(responseBody.toString());
 
+        ProfileModel profileModel = ProfileModel.fromJson(responseBody);
         return profileModel;
       }
 
