@@ -18,6 +18,7 @@ class _IndexScreenState extends State<IndexScreen> {
     const HomeScreen(),
     const ShoppingScreen(),
     const PetServiceScreen(),
+    const CartScreen()
   ];
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,11 @@ class _IndexScreenState extends State<IndexScreen> {
           ),
           NavigationDestination(
             icon: Icon(Icons.cruelty_free, color: Colors.white),
-            label: 'Messages',
+            label: 'Service',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person, color: Colors.white),
+            label: 'User',
           ),
         ],
       ),

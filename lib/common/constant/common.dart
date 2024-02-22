@@ -1,3 +1,3 @@
 class CommonConst {
-  static const String baseApiUrl = 'http://10.241.73.3:8080/api';
+  static const String baseApiUrl = 'http://192.168.1.196:8080/api';
 }
