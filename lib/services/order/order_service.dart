@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:test_flutter_2/common/constant/common.dart';
 import 'package:test_flutter_2/models/cart_model.dart';
+import 'package:test_flutter_2/models/order_model.dart';
 
 class OrderService {
   var client = http.Client();
@@ -35,33 +36,18 @@ class OrderService {
     }
   }
 
-  Future<int> getCartId(String token) async {
+  Future<List<OrderModel>> fetchOrders(String token) async {
     try {
-      var response = await client.get(Uri.parse('$baseApiUrl/cart'),
+      var response = await client.get(Uri.parse('$baseApiUrl/orders'),
           headers: getHeaderAuthorization(token));
       if (response.statusCode == 200) {
-        return jsonDecode(response.body.toString())["cartId"];
-      }
+        dynamic responseBody = jsonDecode(response.body.toString());
 
-      String message = jsonDecode(response.body.toString())['message'];
-      throw Exception(message);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<List<CartModel>> fetchCartProduct(String token) async {
-    try {
-      var response = await client.get(Uri.parse('$baseApiUrl/cart'),
-          headers: getHeaderAuthorization(token));
-      if (response.statusCode == 200) {
-        Map<String, dynamic> responseBody =
-            jsonDecode(response.body.toString());
-        List<CartModel> products = (responseBody['products'] as List)
-            .map((json) => CartModel.fromJson(json))
+        List<OrderModel> orders = (responseBody as List)
+            .map((json) => OrderModel.fromJson(json))
             .toList();
 
-        return products;
+        return orders;
       }
 
       String message = jsonDecode(response.body.toString())['message'];
@@ -71,69 +57,69 @@ class OrderService {
     }
   }
 
-  Future<CartModel> addProductToCart(
-      int productId, int quantity, String token) async {
-    try {
-      int cartId = await getCartId(token);
-      var response = await client.post(
-          Uri.parse('$baseApiUrl/cart/$cartId/$productId/quantity/$quantity'),
-          headers: getHeaderAuthorization(token));
+  // Future<CartModel> addProductToCart(
+  //     int productId, int quantity, String token) async {
+  //   try {
+  //     int cartId = await getCartId(token);
+  //     var response = await client.post(
+  //         Uri.parse('$baseApiUrl/cart/$cartId/$productId/quantity/$quantity'),
+  //         headers: getHeaderAuthorization(token));
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> responseBody =
-            jsonDecode(response.body.toString());
-        List<CartModel> products = (responseBody['products'] as List)
-            .map((json) => CartModel.fromJson(json))
-            .toList();
-        CartModel cartModel =
-            products.firstWhere((element) => element.productId == productId);
-        return cartModel;
-      }
+  //     if (response.statusCode == 200) {
+  //       Map<String, dynamic> responseBody =
+  //           jsonDecode(response.body.toString());
+  //       List<CartModel> products = (responseBody['products'] as List)
+  //           .map((json) => CartModel.fromJson(json))
+  //           .toList();
+  //       CartModel cartModel =
+  //           products.firstWhere((element) => element.productId == productId);
+  //       return cartModel;
+  //     }
 
-      String message = jsonDecode(response.body.toString())['message'];
-      throw Exception(message);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  //     String message = jsonDecode(response.body.toString())['message'];
+  //     throw Exception(message);
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
-  Future<String> deleteProductFromCart(int productId, String token) async {
-    try {
-      int cartId = await getCartId(token);
-      var response = await client.delete(
-          Uri.parse('$baseApiUrl/cart/$cartId/$productId'),
-          headers: getHeaderAuthorization(token));
+  // Future<String> deleteProductFromCart(int productId, String token) async {
+  //   try {
+  //     int cartId = await getCartId(token);
+  //     var response = await client.delete(
+  //         Uri.parse('$baseApiUrl/cart/$cartId/$productId'),
+  //         headers: getHeaderAuthorization(token));
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> responseBody =
-            jsonDecode(response.body.toString());
+  //     if (response.statusCode == 200) {
+  //       Map<String, dynamic> responseBody =
+  //           jsonDecode(response.body.toString());
 
-        return responseBody["message"];
-      }
+  //       return responseBody["message"];
+  //     }
 
-      String message = jsonDecode(response.body.toString())['message'];
-      throw Exception(message);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  //     String message = jsonDecode(response.body.toString())['message'];
+  //     throw Exception(message);
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
-  Future<String> updateQuantity(
-      int productId, String token, int quantity) async {
-    try {
-      int cartId = await getCartId(token);
-      var response = await client.put(
-          Uri.parse('$baseApiUrl/cart/$cartId/$productId/quantity/$quantity'),
-          headers: getHeaderAuthorization(token));
+  // Future<String> updateQuantity(
+  //     int productId, String token, int quantity) async {
+  //   try {
+  //     int cartId = await getCartId(token);
+  //     var response = await client.put(
+  //         Uri.parse('$baseApiUrl/cart/$cartId/$productId/quantity/$quantity'),
+  //         headers: getHeaderAuthorization(token));
 
-      if (response.statusCode == 200) {
-        return "Updated quantity successfully";
-      }
+  //     if (response.statusCode == 200) {
+  //       return "Updated quantity successfully";
+  //     }
 
-      String message = jsonDecode(response.body.toString())['message'];
-      throw Exception(message);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  //     String message = jsonDecode(response.body.toString())['message'];
+  //     throw Exception(message);
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 }

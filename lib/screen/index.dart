@@ -4,6 +4,7 @@ import 'package:test_flutter_2/screen/cart_screen.dart';
 import 'package:test_flutter_2/screen/home_screen.dart';
 import 'package:test_flutter_2/screen/pet_service_screen.dart';
 import 'package:test_flutter_2/screen/shopping_screen.dart';
+import 'package:test_flutter_2/screen/user_screen.dart';
 
 class IndexScreen extends StatefulWidget {
   const IndexScreen({super.key});
@@ -18,7 +19,7 @@ class _IndexScreenState extends State<IndexScreen> {
     const HomeScreen(),
     const ShoppingScreen(),
     const PetServiceScreen(),
-    const CartScreen()
+    const UserScreen()
   ];
   @override
   Widget build(BuildContext context) {
