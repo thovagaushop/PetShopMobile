@@ -8,12 +8,13 @@ class TextFieldCustom extends StatelessWidget {
   final bool obscureText;
   final bool digitText;
 
-  const TextFieldCustom(
-      {super.key,
-      required this.hintText,
-      required this.controller,
-      required this.obscureText,
-      this.digitText = false});
+  const TextFieldCustom({
+    super.key,
+    required this.hintText,
+    required this.controller,
+    required this.obscureText,
+    this.digitText = false,
+  });
 
   @override
   Widget build(BuildContext context) {

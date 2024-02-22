@@ -7,6 +7,7 @@ import 'package:test_flutter_2/screen/login_screen.dart';
 import 'package:test_flutter_2/screen/my_examination_screen.dart';
 import 'package:test_flutter_2/screen/my_order_screen.dart';
 import 'package:test_flutter_2/screen/my_take_care_screen.dart';
+import 'package:test_flutter_2/screen/profile_screen.dart';
 
 class UserCardWidget extends StatelessWidget {
   final Icon icon;
@@ -19,7 +20,7 @@ class UserCardWidget extends StatelessWidget {
     void hanleClick() {
       if (toPath == "profile") {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()));
+            MaterialPageRoute(builder: (context) => const ProfileScreen()));
       } else if (toPath == "orders") {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MyOrderScreen()));
