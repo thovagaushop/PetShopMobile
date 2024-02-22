@@ -7,6 +7,7 @@ import 'package:test_flutter_2/services/bookingConfig/config_service.dart';
 import 'package:test_flutter_2/services/examination/examination_service.dart';
 import 'package:test_flutter_2/services/snackBar/snackbar_service.dart';
 import 'package:test_flutter_2/widgets/Header/main_header.dart';
+import 'package:test_flutter_2/screen/index.dart';
 
 class ExaminationScreen extends StatefulWidget {
   const ExaminationScreen({super.key});
@@ -79,6 +80,15 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
           .createBooking(token, '${date}T${time}:00.000+07:00', description);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBarService.showSnackbar(message, "success"));
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => IndexScreen(
+            currentIndex: 2,
+          ),
+        ),
+      );
       return;
     } catch (e) {
       ScaffoldMessenger.of(context)

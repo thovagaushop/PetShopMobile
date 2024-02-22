@@ -7,7 +7,8 @@ import 'package:test_flutter_2/screen/shopping_screen.dart';
 import 'package:test_flutter_2/screen/user_screen.dart';
 
 class IndexScreen extends StatefulWidget {
-  const IndexScreen({super.key});
+  final int currentIndex;
+  const IndexScreen({super.key, this.currentIndex = 0});
 
   @override
   State<IndexScreen> createState() => _IndexScreenState();
@@ -21,6 +22,16 @@ class _IndexScreenState extends State<IndexScreen> {
     const PetServiceScreen(),
     const UserScreen()
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      _currentPageIndex = widget.currentIndex;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

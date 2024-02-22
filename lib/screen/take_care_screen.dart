@@ -9,6 +9,7 @@ import 'package:test_flutter_2/controllers/user_provider.dart';
 import 'package:test_flutter_2/models/config_model.dart';
 import 'package:test_flutter_2/models/service_select_model.dart';
 import 'package:test_flutter_2/screen/index.dart';
+import 'package:test_flutter_2/screen/my_take_care_screen.dart';
 import 'package:test_flutter_2/screen/pet_service_screen.dart';
 import 'package:test_flutter_2/services/bookingConfig/config_service.dart';
 import 'package:test_flutter_2/services/snackBar/snackbar_service.dart';
@@ -151,9 +152,14 @@ class _TakeCareScreenState extends State<TakeCareScreen> {
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBarService.showSnackbar("Success", "success"));
-
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const IndexScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IndexScreen(
+              currentIndex: 2,
+            ),
+          ),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context)

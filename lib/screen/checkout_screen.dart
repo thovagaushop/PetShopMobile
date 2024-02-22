@@ -82,7 +82,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const IndexScreen(),
+          builder: (context) => const IndexScreen(
+            currentIndex: 1,
+          ),
         ),
       );
     } catch (e) {
