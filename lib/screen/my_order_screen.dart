@@ -5,6 +5,8 @@ import 'package:test_flutter_2/controllers/user_provider.dart';
 import 'package:test_flutter_2/models/order_model.dart';
 import 'package:test_flutter_2/services/order/order_service.dart';
 import 'package:test_flutter_2/services/snackBar/snackbar_service.dart';
+import 'package:test_flutter_2/widgets/Header/service_header.dart';
+import 'package:test_flutter_2/widgets/Header/title_header_widget.dart';
 import 'package:test_flutter_2/widgets/Icons/circle_icon.dart';
 import 'package:test_flutter_2/widgets/MyOrder/my_order_body_widget.dart';
 
@@ -76,31 +78,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 50,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const CircleIconCustom(
-                            icon: Icons.arrow_back_ios_new,
-                            iconSize: 18,
-                          ),
-                        ),
-                      ),
-                      const Text(
-                        "My orders",
-                        style: TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w300,
-                            fontStyle: FontStyle.italic),
-                      ),
-                      const SizedBox(width: 50, child: null),
-                    ],
+                  ServiceHeaderWidget(
+                    title: "My Orders",
                   ),
                   const SizedBox(
                     height: 20,

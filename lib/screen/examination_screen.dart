@@ -9,7 +9,6 @@ import 'package:test_flutter_2/services/examination/examination_service.dart';
 import 'package:test_flutter_2/services/snackBar/snackbar_service.dart';
 import 'package:test_flutter_2/widgets/DateTimePicker/custom_date_picker_widget.dart';
 import 'package:test_flutter_2/widgets/Header/main_header.dart';
-import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:test_flutter_2/screen/index.dart';
 import 'package:test_flutter_2/widgets/Header/service_header.dart';
 import 'package:test_flutter_2/widgets/Header/title_header_widget.dart';
@@ -26,8 +25,8 @@ class ExaminationScreen extends StatefulWidget {
 class _ExaminationScreenState extends State<ExaminationScreen> {
   Future<ConfigModel?>? futureConfigModel;
   final descriptionController = TextEditingController();
-  String date = "";
-  String time = "";
+  DateTime date = DateTime.now();
+  TimeOfDay time = TimeOfDay.now();
   String description = "";
 
   void fetchData() {
@@ -58,8 +57,7 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
             initialDate: DateTime.now())
         .then((value) => {
               setState(() {
-                date =
-                    '${value?.year}-${value?.month.toString().padLeft(2, '0')}-${value?.day.toString().padLeft(2, '0')}';
+                date = value!;
               })
             });
   }
@@ -68,26 +66,31 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
     showTimePicker(context: context, initialTime: TimeOfDay.now())
         .then((value) => {
               setState(() {
-                time =
-                    '${value?.hour.toString().padLeft(2, '0')}:${value?.minute.toString().padLeft(2, '0')}';
+                time = value!;
               })
             });
   }
 
   Future<void> handleSubmit(String description) async {
-    if (date.isEmpty || time.isEmpty || description.isEmpty) {
+    String dateString =
+        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+    String timeString =
+        '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+    if (dateString.isEmpty || timeString.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBarService.showSnackbar("Please fill all fields", "danger"));
       return;
     }
     try {
       final token = Provider.of<UserProvider>(context, listen: false).token!;
-      String message = await ExaminationService()
-          .createBooking(token, '${date}T${time}:00.000+07:00', description);
+      String message = await ExaminationService().createBooking(
+          token, '${dateString}T$timeString:00.000+07:00', description);
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBarService.showSnackbar(message, "success"));
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const IndexScreen(
@@ -148,6 +151,7 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
+                                        // Date Picker
                                         Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -181,11 +185,11 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
                                                               .center,
                                                       children: [
                                                         Text(
-                                                          "YYYY",
+                                                          date.year.toString(),
                                                           style: const TextStyle(
                                                               color: AppColors
                                                                   .primary,
-                                                              fontSize: 16,
+                                                              fontSize: 18,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600),
@@ -194,11 +198,13 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
                                                           width: 10,
                                                         ),
                                                         Text(
-                                                          "MM",
+                                                          date.month
+                                                              .toString()
+                                                              .padLeft(2, '0'),
                                                           style: const TextStyle(
                                                               color: AppColors
                                                                   .primary,
-                                                              fontSize: 16,
+                                                              fontSize: 18,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600),
@@ -209,11 +215,13 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
                                                               child: Text("-")),
                                                         ),
                                                         Text(
-                                                          "DD",
+                                                          date.day
+                                                              .toString()
+                                                              .padLeft(2, '0'),
                                                           style: const TextStyle(
                                                               color: AppColors
                                                                   .primary,
-                                                              fontSize: 16,
+                                                              fontSize: 18,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600),
@@ -238,133 +246,203 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
                                             )
                                           ],
                                         ),
+
+                                        // Time picker
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            const Text(
+                                              "Time",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            Container(
+                                              width: 140,
+                                              height: 190,
+                                              decoration: const BoxDecoration(
+                                                  color: AppColors.secondary1,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(15))),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    height: 50,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          time.hour
+                                                              .toString()
+                                                              .padLeft(2, '0'),
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .primary,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        const Text(
+                                                          ":",
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .primary,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          time.minute
+                                                              .toString()
+                                                              .padLeft(2, '0')
+                                                              .toString()
+                                                              .padLeft(2, '0'),
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .primary,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: InkWell(
+                                                      onTap: _showTimePicker,
+                                                      child: Image.asset(
+                                                        "assets/images/datepicker.png",
+                                                        width: 130,
+                                                        height: 130,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const Center(
-                                child: Text(
-                                  "Form booking an examination",
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primary),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: const BoxDecoration(
-                                  color: AppColors.mainColorFocus,
-                                ),
-                                child: Text(
-                                  'Available slot: ${((config.maxPlaceExamination ?? 0) - (config.currentExaminationBooking ?? 0)).toString()}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  MaterialButton(
-                                    onPressed: _showDatePicker,
-                                    color: AppColors.primary,
-                                    child: const Text(
-                                      'Choose Date',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: Text(date.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            overflow: TextOverflow.clip)),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  MaterialButton(
-                                    onPressed: _showTimePicker,
-                                    color: AppColors.primary,
-                                    child: const Text(
-                                      'Choose Time',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
+                                    const SizedBox(
+                                      height: 40,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: Text(time.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
+                                    // Available slot
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 5),
+                                      decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                          color: AppColors.secondary1),
+                                      child: const Text(
+                                        "Available slots",
+                                        style: TextStyle(
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            overflow: TextOverflow.clip)),
-                                  )
-                                ],
-                              ),
-                              Expanded(
-                                flex: 0,
-                                child: Card(
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: TextField(
-                                        controller: descriptionController,
-                                        maxLines: 8, //or null
-                                        decoration:
-                                            const InputDecoration.collapsed(
-                                                hintText:
-                                                    "Enter your text here"),
+                                            color: AppColors.primary),
                                       ),
-                                    )),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              GestureDetector(
-                                onTap: () => {
-                                  handleSubmit(descriptionController.text
-                                      .toString()
-                                      .trim())
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 70),
-                                  decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(30)),
-                                  child: const Text(
-                                    "Pay now",
-                                    overflow: TextOverflow.clip,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18,
-                                      fontStyle: FontStyle.italic,
                                     ),
-                                  ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+
+                                    Container(
+                                      width: 60,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: AppColors.secondary1,
+                                      ),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "${((config.maxPlaceExamination ?? 0) - (config.currentExaminationBooking ?? 0)).toString()}",
+                                              style: const TextStyle(
+                                                color: AppColors.primary,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ]),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+
+                                    // Decoration
+                                    Expanded(
+                                      flex: 0,
+                                      child: Card(
+                                          color: Colors.white,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: TextField(
+                                              controller: descriptionController,
+                                              maxLines: 5, //or null
+                                              decoration: const InputDecoration
+                                                  .collapsed(
+                                                  hintText:
+                                                      "Enter your text here"),
+                                            ),
+                                          )),
+                                    ),
+
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    // Button Booking
+                                    GestureDetector(
+                                      onTap: () => {
+                                        handleSubmit(descriptionController.text
+                                            .toString()
+                                            .trim())
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 70),
+                                        decoration: BoxDecoration(
+                                            color: AppColors.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(30)),
+                                        child: const Text(
+                                          "Booking",
+                                          overflow: TextOverflow.clip,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

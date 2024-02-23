@@ -234,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: AppColors.primary,
                                     borderRadius: BorderRadius.circular(30)),
                                 child: const Text(
-                                  "Pay now",
+                                  "Update",
                                   overflow: TextOverflow.clip,
                                   maxLines: 1,
                                   style: TextStyle(

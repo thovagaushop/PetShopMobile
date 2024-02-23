@@ -3,7 +3,8 @@ import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/widgets/Icons/circle_icon.dart';
 
 class ServiceHeaderWidget extends StatelessWidget {
-  const ServiceHeaderWidget({super.key});
+  final String title;
+  const ServiceHeaderWidget({super.key, this.title = "Service"});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +23,8 @@ class ServiceHeaderWidget extends StatelessWidget {
             ),
           ),
         ),
-        const Text(
-          "Service",
+        Text(
+          title,
           style: TextStyle(
               color: AppColors.primary,
               fontSize: 32,

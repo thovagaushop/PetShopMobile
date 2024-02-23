@@ -17,6 +17,8 @@ import 'package:test_flutter_2/utils/utils.dart';
 import 'package:test_flutter_2/widgets/Header/main_header.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:test_flutter_2/widgets/Header/service_header.dart';
+import 'package:test_flutter_2/widgets/Header/title_header_widget.dart';
 
 class TakeCareScreen extends StatefulWidget {
   const TakeCareScreen({super.key});
@@ -58,28 +60,30 @@ class _TakeCareScreenState extends State<TakeCareScreen> {
 
       if (configModel != null && mounted) {
         setState(() {
-          listServiceModels = [
-            ServiceModel(
-                checked: false,
-                name: configModel.food1,
-                price: configModel.food1Price),
-            ServiceModel(
-                checked: false,
-                name: configModel.food2,
-                price: configModel.food2Price),
-            ServiceModel(
-                checked: false,
-                name: configModel.food3,
-                price: configModel.food3Price),
-            ServiceModel(
-                checked: false,
-                name: configModel.service1,
-                price: configModel.service1Price),
-            ServiceModel(
-                checked: false,
-                name: configModel.service2,
-                price: configModel.service2Price),
-          ];
+          listServiceModels.add(ServiceModel(
+              checked: false,
+              name: configModel.food1,
+              price: configModel.food1Price));
+
+          listServiceModels.add(ServiceModel(
+              checked: false,
+              name: configModel.food2,
+              price: configModel.food2Price));
+
+          listServiceModels.add(ServiceModel(
+              checked: false,
+              name: configModel.food3,
+              price: configModel.food3Price));
+
+          listServiceModels.add(ServiceModel(
+              checked: false,
+              name: configModel.service1,
+              price: configModel.service1Price));
+
+          listServiceModels.add(ServiceModel(
+              checked: false,
+              name: configModel.service2,
+              price: configModel.service2Price));
         });
       }
 
@@ -184,538 +188,831 @@ class _TakeCareScreenState extends State<TakeCareScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       children: [
-                        const MainHeaderWidget(hasLeftIcon: false),
-                        const Center(
-                          child: Text(
-                            "Form booking an take care",
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                            color: AppColors.mainColorFocus,
-                          ),
-                          child: Text(
-                            'Available slot: ${((config.maxPlaceTakeCare ?? 0) - (config.currentTakeCareBooking ?? 0)).toString()}',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                        const ServiceHeaderWidget(),
                         const SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            MaterialButton(
-                              onPressed: _showDateStartPicker,
-                              color: AppColors.primary,
-                              child: const Text(
-                                'Choose Start Date',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: Text(startDate.toString(),
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.clip)),
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            MaterialButton(
-                              onPressed: _showDateEndPicker,
-                              color: AppColors.primary,
-                              child: const Text(
-                                'Choose End Date',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: Text(endDate.toString(),
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.clip)),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text("Select Pet Type"),
-                        DropdownButton<String>(
-                          value: dropdownValue,
-                          icon: const Icon(Icons.arrow_downward),
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? value) {
-                            // This is called when the user selects an item.
-                            setState(() {
-                              dropdownValue = value!;
-                            });
-                          },
-                          items: listPetType
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                        Expanded(
-                          flex: 0,
-                          child: Card(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: TextField(
-                                  controller: descriptionController,
-                                  maxLines: 4, //or null
-                                  decoration: const InputDecoration.collapsed(
-                                      hintText: "Enter your text here"),
-                                ),
-                              )),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text("Chosse food type"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // +++++ Food1 ++++++++++++ //
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.mainColorFocus,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 20,
-                                          bottom: 20,
-                                          left: 10,
-                                          right: 20),
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(30.0)),
-                                        clipBehavior: Clip.antiAlias,
-                                        child: Image.network(
-                                          Utils()
-                                              .getImageUrl(config.food1Image!),
-                                          // height: double.infinity,
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.contain,
-                                          colorBlendMode: BlendMode.overlay,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            } else {
-                                              return const Center(
-                                                  child:
-                                                      CircularProgressIndicator());
-                                            }
-                                          },
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            // Handle the error here, for example, you can return a placeholder image
-                                            return Container(
-                                              width: 100,
-                                              height: 100,
-                                              color: Colors
-                                                  .grey, // Placeholder color
-                                              child: Icon(Icons
-                                                  .error), // Placeholder icon or custom widget
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                      '${config.food1}: \$ ${config.food1Price}'),
-                                  (listServiceModels.length > 0)
-                                      ? Checkbox(
-                                          value: listServiceModels[0].checked,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              listServiceModels[0].checked =
-                                                  value!;
-                                            });
-                                          },
-                                        )
-                                      : Text("dasdas")
-                                ],
-                              ),
-                            ),
-
-                            // +++++ Food2 ++++++++++++ //
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.mainColorFocus,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 20,
-                                          bottom: 20,
-                                          left: 10,
-                                          right: 20),
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(30.0)),
-                                        clipBehavior: Clip.antiAlias,
-                                        child: Image.network(
-                                          Utils()
-                                              .getImageUrl(config.food2Image!),
-                                          // height: double.infinity,
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.contain,
-                                          colorBlendMode: BlendMode.overlay,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            } else {
-                                              return const Center(
-                                                  child:
-                                                      CircularProgressIndicator());
-                                            }
-                                          },
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            // Handle the error here, for example, you can return a placeholder image
-                                            return Container(
-                                              width: 100,
-                                              height: 100,
-                                              color: Colors
-                                                  .grey, // Placeholder color
-                                              child: Icon(Icons
-                                                  .error), // Placeholder icon or custom widget
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                      '${config.food2}: \$ ${config.food2Price}'),
-                                  (listServiceModels.length > 0)
-                                      ? Checkbox(
-                                          value: listServiceModels[1].checked,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              listServiceModels[1].checked =
-                                                  value!;
-                                            });
-                                          },
-                                        )
-                                      : Text("dasdas")
-                                ],
-                              ),
-                            ),
-
-                            // +++++ Food3 ++++++++++++ //
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.mainColorFocus,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 20,
-                                          bottom: 20,
-                                          left: 10,
-                                          right: 20),
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(30.0)),
-                                        clipBehavior: Clip.antiAlias,
-                                        child: Image.network(
-                                          Utils()
-                                              .getImageUrl(config.food3Image!),
-                                          // height: double.infinity,
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.contain,
-                                          colorBlendMode: BlendMode.overlay,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            } else {
-                                              return const Center(
-                                                  child:
-                                                      CircularProgressIndicator());
-                                            }
-                                          },
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            // Handle the error here, for example, you can return a placeholder image
-                                            return Container(
-                                              width: 100,
-                                              height: 100,
-                                              color: Colors
-                                                  .grey, // Placeholder color
-                                              child: Icon(Icons
-                                                  .error), // Placeholder icon or custom widget
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                      '${config.food3}: \$ ${config.food3Price}'),
-                                  (listServiceModels.length > 0)
-                                      ? Checkbox(
-                                          value: listServiceModels[2].checked,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              listServiceModels[2].checked =
-                                                  value!;
-                                            });
-                                          },
-                                        )
-                                      : Text("dasdas")
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Text("Chosse service type"),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // +++++ Food4 ++++++++++++ //
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                color: AppColors.mainColorFocus,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      '${config.service1}: \$ ${config.service1Price}'),
-                                  (listServiceModels.length > 0)
-                                      ? Checkbox(
-                                          value: listServiceModels[3].checked,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              listServiceModels[3].checked =
-                                                  value!;
-                                            });
-                                          },
-                                        )
-                                      : Text("dasdas")
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            // +++++ Food5 ++++++++++++ //
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                color: AppColors.mainColorFocus,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      '${config.service2}: \$ ${config.service2Price}'),
-                                  (listServiceModels.length > 0)
-                                      ? Checkbox(
-                                          value: listServiceModels[4].checked,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              listServiceModels[4].checked =
-                                                  value!;
-                                            });
-                                          },
-                                        )
-                                      : Text("dasdas")
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              TextButton(
-                                onPressed: () async {
-                                  double totalPrice = 0;
-                                  double petPrice = 5;
-                                  if (dropdownValue == "SENIOR_DOG") {
-                                    petPrice = 10;
-                                  }
+                              const TitleHeaderWidget(
+                                title: "BOOKING-TAKE CARE",
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Start Date
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "Start Date",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: AppColors.primary,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Container(
+                                        width: 160,
+                                        height: 150,
+                                        decoration: const BoxDecoration(
+                                            color: AppColors.secondary1,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15))),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 50,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    startDate.year.toString(),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    startDate.month
+                                                        .toString()
+                                                        .padLeft(2, '0'),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                    child: Center(
+                                                        child: Text("-")),
+                                                  ),
+                                                  Text(
+                                                    startDate.day
+                                                        .toString()
+                                                        .padLeft(2, '0'),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: InkWell(
+                                                onTap: _showDateStartPicker,
+                                                child: Image.asset(
+                                                  "assets/images/timepicker.png",
+                                                  width: 150,
+                                                  height: 150,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
 
-                                  totalPrice = totalPrice +
-                                      (endDate.difference(startDate).inDays +
-                                              1) *
-                                          petPrice;
-
-                                  String note =
-                                      '${descriptionController.text.toString().trim()}, service:';
-
-                                  if (listServiceModels.isNotEmpty) {
-                                    for (int i = 0;
-                                        i < listServiceModels.length;
-                                        i++) {
-                                      if (listServiceModels[i].checked!) {
-                                        totalPrice = totalPrice +
-                                            listServiceModels[i].price!;
-                                        note = note +
-                                            " " +
-                                            listServiceModels[i].name!;
-                                      }
-                                    }
-                                  }
-
-                                  List<dynamic> transactions = [
-                                    {
-                                      "amount": {
-                                        "total":
-                                            (totalPrice / 2).toStringAsFixed(2),
-                                        "currency": "USD",
+                                  // End Date
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "Start Date",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: AppColors.primary,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Container(
+                                        width: 160,
+                                        height: 150,
+                                        decoration: const BoxDecoration(
+                                            color: AppColors.secondary1,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15))),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 50,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    endDate.year.toString(),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    endDate.month
+                                                        .toString()
+                                                        .padLeft(2, '0'),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                    child: Center(
+                                                        child: Text("-")),
+                                                  ),
+                                                  Text(
+                                                    endDate.day
+                                                        .toString()
+                                                        .padLeft(2, '0'),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: InkWell(
+                                                onTap: _showDateEndPicker,
+                                                child: Image.asset(
+                                                  "assets/images/timepicker.png",
+                                                  width: 150,
+                                                  height: 150,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              // Available slot
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 5),
+                                decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30)),
+                                    color: AppColors.secondary1),
+                                child: const Text(
+                                  "Available slots",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.primary),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: AppColors.secondary1,
+                                ),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "${((config.maxPlaceTakeCare ?? 0) - (config.currentTakeCareBooking ?? 0)).toString()}",
+                                        style: const TextStyle(
+                                          color: AppColors.primary,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                  width: 310,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 12.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(
+                                            0.5), // Màu của bóng đổ và độ trong suốt
+                                        spreadRadius:
+                                            2, // Độ lan rộng của bóng đổ
+                                        blurRadius: 5, // Độ mờ của bóng đổ
+                                        offset: const Offset(0,
+                                            2), // Độ dịch chuyển của bóng đổ theo trục X và Y
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(30),
+                                    // border: Border.all(
+                                    //   color: Colors.white,
+                                    // ),
+                                  ),
+                                  child: Center(
+                                    child: DropdownButton<String>(
+                                      value: dropdownValue,
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      // iconSize: 30,
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 16.0),
+                                      underline: SizedBox(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropdownValue = newValue!;
+                                        });
                                       },
-                                      "description":
-                                          "The payment transaction description.",
-                                    }
-                                  ];
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          UsePaypal(
-                                              sandboxMode: true,
-                                              clientId:
-                                                  "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
-                                              secretKey:
-                                                  "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
-                                              returnURL:
-                                                  "https://samplesite.com/return",
-                                              cancelURL:
-                                                  "https://samplesite.com/cancel",
-                                              transactions: transactions,
-                                              note:
-                                                  "Contact us for any questions on your order.",
-                                              onSuccess: (Map params) async {
-                                                handleSubmit(
-                                                    startDate,
-                                                    endDate,
-                                                    note,
-                                                    dropdownValue,
-                                                    totalPrice);
-                                              },
-                                              onError: (error) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        SnackBarService
-                                                            .showSnackbar(
-                                                                error
-                                                                    .toString(),
-                                                                "danger"));
-                                              },
-                                              onCancel: (params) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        SnackBarService
-                                                            .showSnackbar(
-                                                                "Cancel",
-                                                                "danger"));
-                                              }),
+                                      items: listPetType
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child:
+                                              // Text(value),
+                                              Row(
+                                            children: [
+                                              Text(
+                                                value,
+                                                style: const TextStyle(
+                                                    color: AppColors.primary),
+                                              ),
+                                              // Icon(Icons.arrow_drop_down),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
                                     ),
-                                  );
-                                },
-                                style: TextButton.styleFrom(
-                                  backgroundColor: AppColors.secondary,
-                                  foregroundColor: Colors.white,
-                                  shape: const BeveledRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(1),
+                                  )),
+
+                              // Note
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Expanded(
+                                flex: 0,
+                                child: Card(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextField(
+                                        controller: descriptionController,
+                                        maxLines: 4, //or null
+                                        decoration:
+                                            const InputDecoration.collapsed(
+                                                hintText:
+                                                    "Enter your text here"),
+                                      ),
+                                    )),
+                              ),
+
+                              // Service
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Text(
+                                "Chosse food type",
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // +++++ Food1 ++++++++++++ //
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondary1,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 20,
+                                                bottom: 20,
+                                                left: 10,
+                                                right: 20),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(30.0)),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: Image.network(
+                                                Utils().getImageUrl(
+                                                    config.food1Image!),
+                                                // height: double.infinity,
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.contain,
+                                                colorBlendMode:
+                                                    BlendMode.overlay,
+                                                loadingBuilder:
+                                                    (BuildContext context,
+                                                        Widget child,
+                                                        ImageChunkEvent?
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  } else {
+                                                    return const Center(
+                                                        child:
+                                                            CircularProgressIndicator());
+                                                  }
+                                                },
+                                                errorBuilder: (BuildContext
+                                                        context,
+                                                    Object exception,
+                                                    StackTrace? stackTrace) {
+                                                  // Handle the error here, for example, you can return a placeholder image
+                                                  return Container(
+                                                    width: 100,
+                                                    height: 100,
+                                                    color: Colors
+                                                        .grey, // Placeholder color
+                                                    child: const Icon(Icons
+                                                        .error), // Placeholder icon or custom widget
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                            '${config.food1}: \$ ${config.food1Price}'),
+                                        (listServiceModels.isNotEmpty)
+                                            ? Checkbox(
+                                                value: listServiceModels[0]
+                                                    .checked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    listServiceModels[0]
+                                                        .checked = value!;
+                                                  });
+                                                },
+                                              )
+                                            : const Text("dasdas")
+                                      ],
                                     ),
                                   ),
-                                ),
-                                child: const Text('Checkout'),
+
+                                  // +++++ Food2 ++++++++++++ //
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondary1,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 20,
+                                                bottom: 20,
+                                                left: 10,
+                                                right: 20),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(30.0)),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: Image.network(
+                                                Utils().getImageUrl(
+                                                    config.food2Image!),
+                                                // height: double.infinity,
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.contain,
+                                                colorBlendMode:
+                                                    BlendMode.overlay,
+                                                loadingBuilder:
+                                                    (BuildContext context,
+                                                        Widget child,
+                                                        ImageChunkEvent?
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  } else {
+                                                    return const Center(
+                                                        child:
+                                                            CircularProgressIndicator());
+                                                  }
+                                                },
+                                                errorBuilder: (BuildContext
+                                                        context,
+                                                    Object exception,
+                                                    StackTrace? stackTrace) {
+                                                  // Handle the error here, for example, you can return a placeholder image
+                                                  return Container(
+                                                    width: 100,
+                                                    height: 100,
+                                                    color: Colors
+                                                        .grey, // Placeholder color
+                                                    child: const Icon(Icons
+                                                        .error), // Placeholder icon or custom widget
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                            '${config.food2}: \$ ${config.food2Price}'),
+                                        (listServiceModels.isNotEmpty)
+                                            ? Checkbox(
+                                                value: listServiceModels[1]
+                                                    .checked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    listServiceModels[1]
+                                                        .checked = value!;
+                                                  });
+                                                },
+                                              )
+                                            : const Text("dasdas")
+                                      ],
+                                    ),
+                                  ),
+
+                                  // +++++ Food3 ++++++++++++ //
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondary1,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 20,
+                                                bottom: 20,
+                                                left: 10,
+                                                right: 20),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(30.0)),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: Image.network(
+                                                Utils().getImageUrl(
+                                                    config.food3Image!),
+                                                // height: double.infinity,
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.contain,
+                                                colorBlendMode:
+                                                    BlendMode.overlay,
+                                                loadingBuilder:
+                                                    (BuildContext context,
+                                                        Widget child,
+                                                        ImageChunkEvent?
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  } else {
+                                                    return const Center(
+                                                        child:
+                                                            CircularProgressIndicator());
+                                                  }
+                                                },
+                                                errorBuilder: (BuildContext
+                                                        context,
+                                                    Object exception,
+                                                    StackTrace? stackTrace) {
+                                                  // Handle the error here, for example, you can return a placeholder image
+                                                  return Container(
+                                                    width: 100,
+                                                    height: 100,
+                                                    color: Colors
+                                                        .grey, // Placeholder color
+                                                    child: const Icon(Icons
+                                                        .error), // Placeholder icon or custom widget
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                            '${config.food3}: \$ ${config.food3Price}'),
+                                        (listServiceModels.isNotEmpty)
+                                            ? Checkbox(
+                                                value: listServiceModels[2]
+                                                    .checked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    listServiceModels[2]
+                                                        .checked = value!;
+                                                  });
+                                                },
+                                              )
+                                            : const Text("dasdas")
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
-                              Brand(
-                                Brands.paypal,
-                                size: 50,
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Text(
+                                "Chosse service",
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // +++++ Food4 ++++++++++++ //
+                                  Container(
+                                    width: 130,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondary1,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                            '${config.service1}: \$ ${config.service1Price}'),
+                                        (listServiceModels.isNotEmpty)
+                                            ? Checkbox(
+                                                value: listServiceModels[3]
+                                                    .checked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    listServiceModels[3]
+                                                        .checked = value!;
+                                                  });
+                                                },
+                                              )
+                                            : const Text("dasdas")
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  // +++++ Food5 ++++++++++++ //
+                                  Container(
+                                    width: 130,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondary1,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                            '${config.service2}: \$ ${config.service2Price}'),
+                                        (listServiceModels.isNotEmpty)
+                                            ? Checkbox(
+                                                value: listServiceModels[4]
+                                                    .checked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    listServiceModels[4]
+                                                        .checked = value!;
+                                                  });
+                                                },
+                                              )
+                                            : const Text("dasdas")
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+
+                              // Button booking
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.secondary1,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () async {
+                                        double totalPrice = 0;
+                                        double petPrice = 5;
+                                        if (dropdownValue == "SENIOR_DOG") {
+                                          petPrice = 10;
+                                        }
+
+                                        totalPrice = totalPrice +
+                                            (endDate
+                                                        .difference(startDate)
+                                                        .inDays +
+                                                    1) *
+                                                petPrice;
+
+                                        String note =
+                                            '${descriptionController.text.toString().trim()}, service:';
+
+                                        if (listServiceModels.isNotEmpty) {
+                                          for (int i = 0;
+                                              i < listServiceModels.length;
+                                              i++) {
+                                            if (listServiceModels[i].checked!) {
+                                              totalPrice = totalPrice +
+                                                  listServiceModels[i].price!;
+                                              note = note +
+                                                  " " +
+                                                  listServiceModels[i].name!;
+                                            }
+                                          }
+                                        }
+
+                                        List<dynamic> transactions = [
+                                          {
+                                            "amount": {
+                                              "total": (totalPrice / 2)
+                                                  .toStringAsFixed(2),
+                                              "currency": "USD",
+                                            },
+                                            "description":
+                                                "The payment transaction description.",
+                                          }
+                                        ];
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                UsePaypal(
+                                                    sandboxMode: true,
+                                                    clientId:
+                                                        "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
+                                                    secretKey:
+                                                        "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+                                                    returnURL:
+                                                        "https://samplesite.com/return",
+                                                    cancelURL:
+                                                        "https://samplesite.com/cancel",
+                                                    transactions: transactions,
+                                                    note:
+                                                        "Contact us for any questions on your order.",
+                                                    onSuccess:
+                                                        (Map params) async {
+                                                      handleSubmit(
+                                                          startDate,
+                                                          endDate,
+                                                          note,
+                                                          dropdownValue,
+                                                          totalPrice);
+                                                    },
+                                                    onError: (error) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              SnackBarService
+                                                                  .showSnackbar(
+                                                                      error
+                                                                          .toString(),
+                                                                      "danger"));
+                                                    },
+                                                    onCancel: (params) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              SnackBarService
+                                                                  .showSnackbar(
+                                                                      "Cancel",
+                                                                      "danger"));
+                                                    }),
+                                          ),
+                                        );
+                                      },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: AppColors.secondary1,
+                                        foregroundColor: Colors.white,
+                                        shape: const BeveledRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(1),
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text('Checkout',
+                                          style: TextStyle(
+                                              color: AppColors.primary,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    Brand(
+                                      Brands.paypal,
+                                      size: 50,
+                                    )
+                                  ],
+                                ),
                               )
                             ],
                           ),
-                        )
+                        ),
+
+                        // DropdownButton<String>(
+                        //   value: dropdownValue,
+                        //   icon: const Icon(Icons.arrow_downward),
+                        //   elevation: 16,
+                        //   style: const TextStyle(color: Colors.deepPurple),
+                        //   underline: Container(
+                        //     height: 2,
+                        //     color: Colors.deepPurpleAccent,
+                        //   ),
+                        //   onChanged: (String? value) {
+                        //     // This is called when the user selects an item.
+                        //     setState(() {
+                        //       dropdownValue = value!;
+                        //     });
+                        //   },
+                        //   items: listPetType
+                        //       .map<DropdownMenuItem<String>>((String value) {
+                        //     return DropdownMenuItem<String>(
+                        //       value: value,
+                        //       child: Text(value),
+                        //     );
+                        //   }).toList(),
+                        // ),
                       ],
                     ),
                   ),

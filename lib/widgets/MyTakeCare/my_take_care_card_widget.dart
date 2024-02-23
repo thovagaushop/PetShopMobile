@@ -43,63 +43,230 @@ class _MyTakeCareCardWidgetState extends State<MyTakeCareCardWidget> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-              flex: 1,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Text("From: "),
-                    Text(widget.takeCareModel.startDate!
-                        .replaceFirst(":00.000+00:00", " UTC")),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("To: "),
-                    Text(widget.takeCareModel.endDate!
-                        .replaceFirst(":00.000+00:00", " UTC")),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("Pet type: "),
-                    Text(widget.takeCareModel.petType!),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("Note: "),
-                    Text(widget.takeCareModel.note!),
-                    const Text("Price: "),
-                    Text(widget.takeCareModel.price!.toString()),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ])),
-          const SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            flex: 0,
-            child: IconButton(
-              onPressed: () {
-                return handleDelete(
-                    userProvider.token, widget.takeCareModel.id);
-              },
-              icon: const Icon(
-                Icons.delete,
-                color: AppColors.mainColorFocus,
-                size: 30,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Container(
+        height: 400,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Text(
+                "Date & Time",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
+              Container(
+                height: 50,
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: AppColors.secondary1,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(
+                            0.5), // Màu của bóng đổ và độ trong suốt
+                        spreadRadius: 2, // Độ lan rộng của bóng đổ
+                        blurRadius: 5, // Độ mờ của bóng đổ
+                        offset: const Offset(0,
+                            2), // Độ dịch chuyển của bóng đổ theo trục X và Y
+                      ),
+                    ]),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'From: ${widget.takeCareModel.startDate!.replaceFirst(":00.000+00:00", " UTC")}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'To: ${widget.takeCareModel.endDate!.replaceFirst(":00.000+00:00", " UTC")}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              // Pet type
+              const Text(
+                "Pet Type",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Container(
+                  height: 50,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: AppColors.secondary1,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(
+                              0.5), // Màu của bóng đổ và độ trong suốt
+                          spreadRadius: 2, // Độ lan rộng của bóng đổ
+                          blurRadius: 5, // Độ mờ của bóng đổ
+                          offset: const Offset(0,
+                              2), // Độ dịch chuyển của bóng đổ theo trục X và Y
+                        ),
+                      ]),
+                  child: Center(
+                    child: Text(
+                      widget.takeCareModel.petType!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )),
+              // Note
+              const Text(
+                "Pet Type",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Container(
+                  height: 50,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: AppColors.secondary1,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(
+                              0.5), // Màu của bóng đổ và độ trong suốt
+                          spreadRadius: 2, // Độ lan rộng của bóng đổ
+                          blurRadius: 5, // Độ mờ của bóng đổ
+                          offset: const Offset(0,
+                              2), // Độ dịch chuyển của bóng đổ theo trục X và Y
+                        ),
+                      ]),
+                  child: Center(
+                    child: Text(
+                      widget.takeCareModel.note!,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          overflow: TextOverflow.clip),
+                      maxLines: 2,
+                    ),
+                  )),
+
+              // Price
+              const Text(
+                "Pet Type",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Container(
+                  height: 50,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: AppColors.secondary1,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(
+                              0.5), // Màu của bóng đổ và độ trong suốt
+                          spreadRadius: 2, // Độ lan rộng của bóng đổ
+                          blurRadius: 5, // Độ mờ của bóng đổ
+                          offset: const Offset(0,
+                              2), // Độ dịch chuyển của bóng đổ theo trục X và Y
+                        ),
+                      ]),
+                  child: Center(
+                    child: Text(
+                      widget.takeCareModel.price!.toString(),
+                      style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          overflow: TextOverflow.clip),
+                      maxLines: 2,
+                    ),
+                  )),
+            ],
           ),
-        ],
+        ),
+        // child: Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   children: [
+        //     Expanded(
+        //         flex: 1,
+        //         child: Column(
+        //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //             children: [
+        //               const Text("From: "),
+        //               Text(widget.takeCareModel.startDate!
+        //                   .replaceFirst(":00.000+00:00", " UTC")),
+        //               const SizedBox(
+        //                 height: 10,
+        //               ),
+        //               const Text("To: "),
+        //               Text(widget.takeCareModel.endDate!
+        //                   .replaceFirst(":00.000+00:00", " UTC")),
+        //               const SizedBox(
+        //                 height: 10,
+        //               ),
+        //               const Text("Pet type: "),
+        //               Text(widget.takeCareModel.petType!),
+        //               const SizedBox(
+        //                 height: 10,
+        //               ),
+        //               const Text("Note: "),
+        //               Text(widget.takeCareModel.note!),
+        //               const Text("Price: "),
+        //               Text(widget.takeCareModel.price!.toString()),
+        //               const SizedBox(
+        //                 height: 10,
+        //               ),
+        //             ])),
+        //     const SizedBox(
+        //       width: 10,
+        //     ),
+        //     Expanded(
+        //       flex: 0,
+        //       child: IconButton(
+        //         onPressed: () {
+        //           return handleDelete(
+        //               userProvider.token, widget.takeCareModel.id);
+        //         },
+        //         icon: const Icon(
+        //           Icons.delete,
+        //           color: AppColors.mainColorFocus,
+        //           size: 30,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }

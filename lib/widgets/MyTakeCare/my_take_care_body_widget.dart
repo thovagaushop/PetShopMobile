@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/models/my_take_care_model.dart';
 import 'package:test_flutter_2/widgets/MyTakeCare/my_take_care_card_widget.dart';
 
@@ -33,8 +34,9 @@ class _MyTakeCareBodyWidgetState extends State<MyTakeCareBodyWidget> {
                       });
                 },
                 separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                  height: 10,
+                    const Divider(
+                  thickness: 1,
+                  color: AppColors.primary,
                 ),
               )),
         ],
