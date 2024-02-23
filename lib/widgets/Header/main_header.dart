@@ -99,7 +99,7 @@ class _MainHeaderWidgetState extends State<MainHeaderWidget> {
                   style: const TextStyle(
                       color: AppColors.primary,
                       fontSize: 32,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w500,
                       fontStyle: FontStyle.italic),
                 ),
                 InkWell(

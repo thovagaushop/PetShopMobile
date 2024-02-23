@@ -24,7 +24,7 @@ class SnackBarService {
       ),
       behavior: SnackBarBehavior.floating,
       showCloseIcon: true,
-      duration: const Duration(milliseconds: 10000),
+      duration: const Duration(milliseconds: 2000),
     );
   }
 }

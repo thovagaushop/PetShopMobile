@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/controllers/user_provider.dart';
@@ -6,8 +7,14 @@ import 'package:test_flutter_2/models/config_model.dart';
 import 'package:test_flutter_2/services/bookingConfig/config_service.dart';
 import 'package:test_flutter_2/services/examination/examination_service.dart';
 import 'package:test_flutter_2/services/snackBar/snackbar_service.dart';
+import 'package:test_flutter_2/widgets/DateTimePicker/custom_date_picker_widget.dart';
 import 'package:test_flutter_2/widgets/Header/main_header.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:test_flutter_2/screen/index.dart';
+import 'package:test_flutter_2/widgets/Header/service_header.dart';
+import 'package:test_flutter_2/widgets/Header/title_header_widget.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ExaminationScreen extends StatefulWidget {
   const ExaminationScreen({super.key});
@@ -68,7 +75,6 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
   }
 
   Future<void> handleSubmit(String description) async {
-    print('${date}T${time}:00.000+07:00');
     if (date.isEmpty || time.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBarService.showSnackbar("Please fill all fields", "danger"));
@@ -84,7 +90,7 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => IndexScreen(
+          builder: (context) => const IndexScreen(
             currentIndex: 2,
           ),
         ),
@@ -123,7 +129,120 @@ class _ExaminationScreenState extends State<ExaminationScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Column(
                             children: [
-                              const MainHeaderWidget(hasLeftIcon: false),
+                              const ServiceHeaderWidget(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const TitleHeaderWidget(
+                                      title: "BOOKING-EXAMINATION",
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            const Text(
+                                              "Date",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            Container(
+                                              width: 140,
+                                              height: 190,
+                                              decoration: const BoxDecoration(
+                                                  color: AppColors.secondary1,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(15))),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    height: 50,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          "YYYY",
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .primary,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                          "MM",
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .primary,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                          child: Center(
+                                                              child: Text("-")),
+                                                        ),
+                                                        Text(
+                                                          "DD",
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .primary,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: InkWell(
+                                                      onTap: _showDatePicker,
+                                                      child: Image.asset(
+                                                        "assets/images/timepicker.png",
+                                                        width: 130,
+                                                        height: 130,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
                               const Center(
                                 child: Text(
                                   "Form booking an examination",
