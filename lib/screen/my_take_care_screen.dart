@@ -93,7 +93,7 @@ class _MyTakeCareScreenState extends State<MyTakeCareScreen> {
                               ),
                             ),
                             const Text(
-                              "My examinations",
+                              "My take care",
                               style: TextStyle(
                                   color: AppColors.primary,
                                   fontSize: 32,

@@ -211,6 +211,20 @@ class _MyTakeCareCardWidgetState extends State<MyTakeCareCardWidget> {
                       maxLines: 2,
                     ),
                   )),
+              Expanded(
+                flex: 0,
+                child: IconButton(
+                  onPressed: () {
+                    return handleDelete(
+                        userProvider.token, widget.takeCareModel.id);
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: AppColors.mainColorFocus,
+                    size: 30,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

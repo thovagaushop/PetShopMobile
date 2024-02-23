@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/models/order_model.dart';
 import 'package:test_flutter_2/widgets/MyOrder/my_order_card_widget.dart';
 
@@ -33,9 +34,7 @@ class _MyOrderBodyWidgetState extends State<MyOrderBodyWidget> {
                       });
                 },
                 separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                  height: 10,
-                ),
+                    const Divider(thickness: 1, color: AppColors.primary),
               )),
         ],
       ),
