@@ -50,6 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBarService.showSnackbar(responseBody['message'], "success"));
         Navigator.pop(context);
+        return;
       }
       String message = jsonDecode(response.body.toString())['message'];
       throw Exception(message);

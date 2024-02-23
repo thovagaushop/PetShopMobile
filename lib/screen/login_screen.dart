@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:test_flutter_2/common/constant/app_color.dart';
 import 'package:test_flutter_2/controllers/user_provider.dart';
 import 'package:test_flutter_2/models/user_model.dart';
+import 'package:test_flutter_2/screen/forgot_password_screen.dart';
 import 'package:test_flutter_2/screen/index.dart';
 import 'package:test_flutter_2/screen/register_screen.dart';
 import 'package:test_flutter_2/services/authentication/authentication_service.dart';
@@ -223,6 +224,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fontWeight: FontWeight.bold)),
                             ),
                           ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordScreen()));
+                          },
+                          child: const Text("Forgot Password",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: AppColors.mainColorFocus,
+                                  fontWeight: FontWeight.bold)),
                         )
                         // TextButton(onPressed: , child: child)
                       ]),
