@@ -876,6 +876,50 @@ class _TakeCareScreenState extends State<TakeCareScreen> {
                                   children: [
                                     TextButton(
                                       onPressed: () async {
+                                        // Validate first
+                                        if (descriptionController.text
+                                            .toString()
+                                            .trim()
+                                            .isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                                  SnackBarService.showSnackbar(
+                                                      "Please note for your pet",
+                                                      "danger"));
+                                          return;
+                                        }
+
+                                        if (startDate
+                                            .isBefore(DateTime.now())) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                                  SnackBarService.showSnackbar(
+                                                      "Start date must be in the future",
+                                                      "danger"));
+                                          return;
+                                        }
+
+                                        if (endDate.isBefore(startDate)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                                  SnackBarService.showSnackbar(
+                                                      "End date must be after start date",
+                                                      "danger"));
+                                          return; // Kết thúc hàm nếu endDate không hợp lệ
+                                        }
+
+                                        final differenceInDays = endDate
+                                            .difference(startDate)
+                                            .inDays;
+                                        if (differenceInDays > 30) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                                  SnackBarService.showSnackbar(
+                                                      "Booking period must be within 30 days",
+                                                      "danger"));
+                                          return; // Kết thúc hàm nếu khoảng thời gian lớn hơn 30 ngày
+                                        }
+
                                         double totalPrice = 0;
                                         double petPrice = 5;
                                         if (dropdownValue == "SENIOR_DOG") {
@@ -985,6 +1029,9 @@ class _TakeCareScreenState extends State<TakeCareScreen> {
                                     )
                                   ],
                                 ),
+                              ),
+                              const SizedBox(
+                                height: 30,
                               )
                             ],
                           ),
